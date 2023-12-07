@@ -25,7 +25,7 @@ def wait_for_mysql():
             break
         except pymysql.Error as err:
             print(f"Waiting for MySQL... ({err})")
-            time.sleep(10)
+            time.sleep(3)
             retries += 1
 
             if retries >= max_retries:
