@@ -1,0 +1,34 @@
+version: '3.9'
+
+services:
+  python_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: mysql
+      DB_USER: python_app_user
+      DB_PASSWORD_FILE: /run/secrets/mysql_password
+      DB_DATABASE: python_shop
+    ports:
+      - "80:8000"
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c 'import pymysql; pymysql.connect(host=\"mysql\", user=\"python_app_user\", password=open(\"/run/secrets/mysql_password\").read(), database=\"python_shop\")'"]
+      interval: 1s
+      timeout: 2s
+      retries: 5
+    depends_on:
+      - mysql
+    networks:
+      - mysql-network
+    command: ["python3", "main.py"]
+
+networks:
+  mysql-network:
+    driver: bridge
+
+secrets:
+  mysql_root_password:
+    file: .env_mysql_root_password
+  mysql_password:
+    file: .env_mysql_password
