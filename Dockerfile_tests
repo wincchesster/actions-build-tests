@@ -1,0 +1,7 @@
+FROM ghcr.io/wincchesster/actions-build-tests:v0.0.3
+
+# Copy source code to image
+COPY tests /app
+
+# Run the application
+CMD ["python3", "test.py"]
