@@ -32,7 +32,7 @@ def wait_for_mysql():
                 print("Unable to connect to MySQL. Exiting.")
                 exit(1)
 
-# wait_for_mysql()
+wait_for_mysql()
 
 # Create custom mysql class
 class CustomMysql(Mysql):
