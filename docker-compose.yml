@@ -22,6 +22,8 @@ services:
       - mysql_password
 
   python_testing_app:
+    tty: true
+    image: ghcr.io/wincchesster/actions-build-tests:tests
     build:
       context: .
       dockerfile: Dockerfile_tests

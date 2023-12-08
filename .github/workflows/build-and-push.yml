@@ -48,12 +48,26 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v5
         with:
+          push: false
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Build image with tests
+        uses: docker/build-push-action@v5
+        with:
+          file: Dockerfile_tests
+          push: false
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tests
+      
+      - name: Run tests
+        id: run_tests
+        run: |
+          docker compose up -d mysql
+          dokcer compose up --exit-code-from python_testing_app python_testing_app
+          
+      - name: Push image
+        uses: docker/build-push-action@v5
+        with:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
 
-      # - name: Push image
-      #   uses: docker/build-push-action@v5
-      #   with:
-      #     push: true
-      #     tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
 
