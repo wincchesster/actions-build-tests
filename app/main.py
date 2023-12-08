@@ -32,7 +32,7 @@ def wait_for_mysql():
                 print("Unable to connect to MySQL. Exiting.")
                 exit(1)
 
-#wait_for_mysql()
+wait_for_mysql()
 
 # Create custom mysql class
 class CustomMysql(Mysql):
@@ -67,19 +67,19 @@ class CustomMysql(Mysql):
         self.execute_query(delete_table_query)
 
 # Create table and add items
-# if __name__ == "__main__":
-#     mysql_instance = CustomMysql()
-#     mysql_instance.create_shop()
-#     mysql_instance.add_item("apple", 1.99)
-#     mysql_instance.add_item("banana", 3.99)
-#     print("Items in the shop:")
-#     items = mysql_instance.fetch_all("SELECT * FROM shop")
-#     for item in items:
-#         print(item)
-#     mysql_instance.delete_item("apple")
-#     print("Items after deletion:")
-#     items = mysql_instance.fetch_all("SELECT * FROM shop")
-#     for item in items:
-#         print(item)
-#     mysql_instance.delete_shop()
-#     mysql_instance.close_connection()
+if __name__ == "__main__":
+    mysql_instance = CustomMysql()
+    mysql_instance.create_shop()
+    mysql_instance.add_item("apple", 1.99)
+    mysql_instance.add_item("banana", 3.99)
+    print("Items in the shop:")
+    items = mysql_instance.fetch_all("SELECT * FROM shop")
+    for item in items:
+        print(item)
+    mysql_instance.delete_item("apple")
+    print("Items after deletion:")
+    items = mysql_instance.fetch_all("SELECT * FROM shop")
+    for item in items:
+        print(item)
+    mysql_instance.delete_shop()
+    mysql_instance.close_connection()
