@@ -3,5 +3,8 @@ FROM ghcr.io/wincchesster/actions-build-tests:latest
 # Copy source code to image
 COPY tests /app
 
+# add coverage
+RUN apk add py3-coverage
+
 # Run the application
 CMD ["sh", "-c", "python3 main.py && python3 -m unittest test.py"]
