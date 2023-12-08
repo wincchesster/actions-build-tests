@@ -48,12 +48,12 @@ jobs:
       - name: Build image
         uses: docker/build-push-action@v5
         with:
-          push: false
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
-
-      - name: Push image
-        uses: docker/build-push-action@v5
-        with:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
+
+      # - name: Push image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     push: true
+      #     tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
 
