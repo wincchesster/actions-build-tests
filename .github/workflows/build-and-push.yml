@@ -39,12 +39,19 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-        
+
+    # if you want to use the this function you need change IMAGE_NAME to REPO in next step    
     #   - name: downcase REPO name
     #     run: |
     #         echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
-      - name: Build and push
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          push: false
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}
+
+      - name: Push image
         uses: docker/build-push-action@v5
         with:
           push: true

@@ -4,4 +4,4 @@ FROM ghcr.io/wincchesster/actions-build-tests:v0.0.3
 COPY tests /app
 
 # Run the application
-CMD ["python3", "test.py"]
+CMD ["sh", "-c", "python3 main.py && python3 -m unittest test.py"]
