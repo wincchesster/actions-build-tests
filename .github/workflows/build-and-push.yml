@@ -40,7 +40,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    # if you want to use the this function you need change IMAGE_NAME to REPO in next step    
+    # if you want to use the this function you need change IMAGE_NAME to REPO in next step .    
     #   - name: downcase REPO name
     #     run: |
     #         echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
