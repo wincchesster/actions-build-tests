@@ -89,7 +89,7 @@ jobs:
           message: 'Add code coverage report'
           add: 'coverage'
           new_branch: gh-pages 
-          pull: '--rebase'
+          pull: '--rebase --autostash'
           push: true
         
 
