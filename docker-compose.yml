@@ -38,7 +38,21 @@ services:
       - mysql
     networks:
       - mysql-network
-    
+
+  app-coverage:
+    tty: true
+    image: ghcr.io/wincchesster/actions-build-tests:tests
+    build:
+      context: .
+      dockerfile: Dockerfile_tests
+    environment:
+      DB_HOST: mysql
+      DB_USER: python_app_user
+      DB_PASSWORD_FILE: /run/secrets/mysql_password
+      DB_DATABASE: python_shop
+    entrypoint: "coverage run -m unittest test.py && coverage report -m && coverage html -d coverage"
+    volumes:
+      - ./coverage:/app/coverage
 
 networks:
   mysql-network:

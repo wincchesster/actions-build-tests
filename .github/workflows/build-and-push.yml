@@ -70,4 +70,13 @@ jobs:
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
+      - name: Test coverage
+        run: |
+          mkdir coverage
+          docker compose up -d mysql
+          docker compose up app-coverage
+          cat coverage/coverage.html
+
+  
+
 
