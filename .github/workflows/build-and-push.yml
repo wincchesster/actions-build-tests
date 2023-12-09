@@ -76,9 +76,6 @@ jobs:
           docker compose up -d mysql
           docker compose up app-coverage
           cat coverage/index.html
-
-      - name: Create gh-pages branch if not exists
-        run: git show-ref --verify --quiet refs/heads/gh-pages || git checkout --orphan gh-pages && git rm -rf .
         
 
       - name: Deploy to GitHub pages
