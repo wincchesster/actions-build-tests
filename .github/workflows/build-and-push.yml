@@ -89,7 +89,8 @@ jobs:
           message: 'Add code coverage report'
           add: 'coverage'
           new_branch: gh-pages 
-          push: force
+          pull: '--rebase'
+          push: true
         
 
       - name: Deploy to GitHub Pages
