@@ -98,11 +98,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
