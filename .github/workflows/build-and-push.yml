@@ -1,4 +1,4 @@
-name: Build
+name: Build and Push
 
 on:
   push:
@@ -92,13 +92,13 @@ jobs:
           push: true
         
 
-      # - name: Deploy to GitHub Pages
-      #   uses: crazy-max/ghaction-github-pages@v4
-      #   with:
-      #     target_branch: gh-pages # is default and can be changed to another branch
-      #     build_dir: coverage
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy to GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v4
+        with:
+          target_branch: gh-pages # is default and can be changed to another branch
+          build_dir: coverage
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       - name: Archive code coverage results
