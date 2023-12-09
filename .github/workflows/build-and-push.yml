@@ -77,11 +77,14 @@ jobs:
           docker compose up app-coverage
           cat coverage/index.html
 
+      - name: Create gh-pages branch if not exists
+        run: git show-ref --verify --quiet refs/heads/gh-pages || git checkout --orphan gh-pages && git rm -rf .
+        
+
       - name: Deploy to GitHub pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: main
           publish_dir: ./coverage
 
   
