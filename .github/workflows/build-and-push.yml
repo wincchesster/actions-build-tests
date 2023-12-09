@@ -67,7 +67,7 @@ jobs:
           docker compose up -d mysql
           docker compose up --exit-code-from python_testing_app python_testing_app
           
-          
+
       - name: Push image
         uses: docker/build-push-action@v5
         with:
@@ -108,6 +108,23 @@ jobs:
         with:
           name: code-coverage-report
           path: coverage/index.html
+
+      # - name: Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #    tag: ${{ steps.tag_version.outputs.new_tag }}
+      #    artifacts: "test-service.deb"
+      #    bodyFile: "release-notes.md"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: coverage/index.html
+          body: |
+            Some release notes go here.
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   
 
