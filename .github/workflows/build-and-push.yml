@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - gh-pages
   pull_request:
     branches:
       - main
+      - gh-pages
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
