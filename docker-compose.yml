@@ -53,6 +53,12 @@ services:
     entrypoint: "coverage run -m unittest test.py && coverage report -m && coverage html -d coverage"
     volumes:
       - ./coverage:/app/coverage
+    ports:
+      - "80:8000"
+    depends_on:
+      - mysql
+    networks:
+      - mysql-network
 
 networks:
   mysql-network:
