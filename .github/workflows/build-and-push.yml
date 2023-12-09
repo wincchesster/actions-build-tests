@@ -7,6 +7,9 @@ on:
   pull_request:
     branches:
       - main
+  workflow_run:
+    types: 
+      - created
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -94,7 +97,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v4
         with:
-          #target_branch: gh-pages
+          target_branch: gh-pages # is default and can be changed to another branch
           build_dir: coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

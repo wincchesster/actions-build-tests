@@ -29,19 +29,19 @@ class TestCustomMysql(unittest.TestCase):
         # Delete the table 'shop' if it exists
         self.mysql_instance.delete_shop()
     
-    # def test_add_and_fetch_item(self):
-    #     # Add an item to the shop and fetch it
-    #     self.mysql_instance.create_shop()
-    #     self.mysql_instance.add_item("apple", 1.99)
-    #     items = self.mysql_instance.fetch_all("SELECT * FROM shop")
-    #     expected_item = ("apple", 1.99)
+    def test_add_and_fetch_item(self):
+        # Add an item to the shop and fetch it
+        self.mysql_instance.create_shop()
+        self.mysql_instance.add_item("apple", 1.99)
+        items = self.mysql_instance.fetch_all("SELECT * FROM shop")
+        expected_item = ("apple", 1.99)
         
-    # def test_delete_item(self):
-    #     # Add an item to the shop, delete it and check if it's gone
-    #     self.mysql_instance.add_item("apple", 1.99)
-    #     self.mysql_instance.delete_item("apple")
-    #     items = self.mysql_instance.fetch_all("SELECT * FROM shop")
-    #     self.assertNotIn(("apple", 1.99), items)
+    def test_delete_item(self):
+        # Add an item to the shop, delete it and check if it's gone
+        self.mysql_instance.add_item("apple", 1.99)
+        self.mysql_instance.delete_item("apple")
+        items = self.mysql_instance.fetch_all("SELECT * FROM shop")
+        self.assertNotIn(("apple", 1.99), items)
 
 
 if __name__ == '__main__':
