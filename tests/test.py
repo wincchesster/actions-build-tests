@@ -44,6 +44,5 @@ class TestCustomMysql(unittest.TestCase):
         self.assertNotIn(("apple", 1.99), items)
 
 
-
 if __name__ == '__main__':
     unittest.main()
