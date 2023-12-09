@@ -102,4 +102,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: code-coverage-report
-          path: gh-pages/coverage/index.html
+          path: gh-pages/index.html
