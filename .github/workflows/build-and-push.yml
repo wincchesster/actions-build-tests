@@ -85,18 +85,19 @@ jobs:
           author_email: wincchesster@gmail.com
           message: 'Add code coverage report'
           add: 'coverage'
+          new_branch: gh-pages 
           push: true
         
 
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v4
         with:
-          target_branch: main
+          target_branch: gh-pages
           build_dir: coverage
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          
+
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
