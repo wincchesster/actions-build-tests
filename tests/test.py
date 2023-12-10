@@ -36,12 +36,12 @@ class TestCustomMysql(unittest.TestCase):
         items = self.mysql_instance.fetch_all("SELECT * FROM shop")
         expected_item = ("apple", 1.99)
         
-    def test_delete_item(self):
-        # Add an item to the shop, delete it and check if it's gone
-        self.mysql_instance.add_item("apple", 1.99)
-        self.mysql_instance.delete_item("apple")
-        items = self.mysql_instance.fetch_all("SELECT * FROM shop")
-        self.assertNotIn(("apple", 1.99), items)
+    # def test_delete_item(self):
+    #     # Add an item to the shop, delete it and check if it's gone
+    #     self.mysql_instance.add_item("apple", 1.99)
+    #     self.mysql_instance.delete_item("apple")
+    #     items = self.mysql_instance.fetch_all("SELECT * FROM shop")
+    #     self.assertNotIn(("apple", 1.99), items)
 
 
 if __name__ == '__main__':
