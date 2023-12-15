@@ -1,0 +1,19 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Check repo') {
+            steps {
+                git branch: 'main',
+                credentialsId: 'GitHub-private-key',
+                url: 'https://github.com/wincchesster/actions-build-tests.git'
+                sh 'ls -ls ./'
+            }
+        }
+        stage('Build Docker Compose') {
+            steps {
+                sh 'docker-compose build'
+            }
+        }
+    }
+}
