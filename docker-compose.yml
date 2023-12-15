@@ -32,8 +32,8 @@ services:
     environment:
       DB_HOST: mysql
       DB_USER: python_app_user
-      DB_PASSWORD_FILE: /run/secrets/mysql_password
-      # DB_PASSWORD: password
+      # DB_PASSWORD_FILE: /run/secrets/mysql_password
+      DB_PASSWORD: password
       DB_DATABASE: python_shop
     ports:
       - "80:8000"
