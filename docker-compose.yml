@@ -4,10 +4,12 @@ services:
   mysql:
     image: mysql:latest
     environment:
-      YSQL_ROOT_PASSWORD_FILE: mysql_root_password
+      # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_ROOT_PASSWORD: qwerty
       MYSQL_DATABASE: python_shop
       MYSQL_USER: python_app_user
-      MYSQL_PASSWORD_FILE: mysql_password
+      # MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
     # healthcheck:
@@ -17,9 +19,9 @@ services:
     #   retries: 5
     networks:
       - mysql-network
-    secrets:
-      - mysql_root_password
-      - mysql_password
+    # secrets:
+    #   - mysql_root_password
+    #   - mysql_password
 
   python_testing_app:
     tty: true
@@ -68,8 +70,8 @@ networks:
   mysql-network:
     driver: bridge
 
-secrets:
-  mysql_root_password:
-    file: .env_mysql_root_password
-  mysql_password:
-    file: .env_mysql_password
+# secrets:
+#   mysql_root_password:
+#     file: .env_mysql_root_password
+#   mysql_password:
+#     file: .env_mysql_password
