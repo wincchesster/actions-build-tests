@@ -59,8 +59,8 @@ services:
                coverage report -m &&
                coverage html -d /app/coverage
                echo 'Coverage report generated in /app/coverage'"
-    # volumes:
-    #   - ./coverage:/app/coverage
+    volumes:
+      - ./coverage:/app/coverage
     ports:
       - "80:8000"
     depends_on:
