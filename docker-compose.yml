@@ -61,6 +61,7 @@ services:
                echo 'Coverage report generated in /app/coverage'"
     volumes:
       - ./coverage:/app/coverage
+      - ./coverage:/home/jenkins/workspace/GitHub-Workflow/coverage
     ports:
       - "80:8000"
     depends_on:
