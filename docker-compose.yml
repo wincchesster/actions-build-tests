@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   mysql:
+    container_name: mysql-server
     image: mysql:latest
     environment:
       # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
@@ -24,6 +25,7 @@ services:
     #   - mysql_password
 
   python_testing_app:
+    container_name: python_testing_container
     tty: true
     image: ghcr.io/wincchesster/actions-build-tests:tests
     build:
