@@ -5,6 +5,11 @@ pipeline {
         }
     }
 
+    environment {
+        ROOT_PASSWORD_ID = 'root_password_id'
+        USER_PASSWORD_ID = 'user_password_id'
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -15,10 +20,15 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'root_password_id', variable: 'DB_ROOT_PASSWORD'),
-                                     string(credentialsId: 'user_password_id', variable: 'DB_USER_PASSWORD')]) {
+                    withCredentials([
+                        string(credentialsId: env.ROOT_PASSWORD_ID, variable: 'DB_ROOT_PASSWORD'),
+                        string(credentialsId: env.USER_PASSWORD_ID, variable: 'DB_USER_PASSWORD')
+                    ]) {
                         sh 'docker-compose up -d mysql'
-                        sh 'docker-compose up -d python_testing_app'
+                        sh 'docker-compose up  python_testing_app'
+                        sh 'docker stop python_testing_container'
+                        
+                        
                     }
                 }
             }
@@ -27,16 +37,15 @@ pipeline {
         stage('Create coverage report') {
             steps {
                 script {
-                    try {
-                        withCredentials([string(credentialsId: 'root_password_id', variable: 'DB_ROOT_PASSWORD'),
-                                         string(credentialsId: 'user_password_id', variable: 'DB_USER_PASSWORD')]) {
-                            sh """
-                            docker-compose up -d app-coverage
-                            docker cp app-coverage:/app/coverage/ .
-                            """
-                        }
-                    } catch (Exception e) {
-                        echo "Error for mount: ${e.getMessage()}"
+                    withCredentials([
+                        string(credentialsId: env.ROOT_PASSWORD_ID, variable: 'DB_ROOT_PASSWORD'),
+                        string(credentialsId: env.USER_PASSWORD_ID, variable: 'DB_USER_PASSWORD')
+                    ]) {
+                          sh 'docker-compose up -d mysql'
+                          sh 'docker-compose up  app-coverage'
+                          sleep time: 3, unit: 'SECONDS'
+                          sh 'docker cp app-coverage:/app/coverage/ .'
+                          sh 'docker stop mysql-server'
                     }
                 }
             }
