@@ -63,7 +63,6 @@ services:
                coverage html -d /app/coverage
                cat /app/coverage/index.html
                echo 'Coverage report generated in /app/coverage'"
-    # ---- for github actions usage:
     volumes:
       - ./coverage:/app/coverage
     ports:

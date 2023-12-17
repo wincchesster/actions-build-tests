@@ -1,1 +1,59 @@
-.
+pipeline {
+    agent {
+        node {
+            label 'app_node'
+        }
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], userRemoteConfigs: [[url: 'https://github.com/wincchesster/actions-build-tests.git']]])
+            }
+        }
+
+        stage('Build and Test') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'root_password_id', variable: 'DB_ROOT_PASSWORD'),
+                                     string(credentialsId: 'user_password_id', variable: 'DB_USER_PASSWORD')]) {
+                        sh 'docker-compose up -d mysql'
+                        sh 'docker-compose up -d python_testing_app'
+                    }
+                }
+            }
+        }
+
+        stage('Create coverage report') {
+            steps {
+                script {
+                    try {
+                        withCredentials([string(credentialsId: 'root_password_id', variable: 'DB_ROOT_PASSWORD'),
+                                         string(credentialsId: 'user_password_id', variable: 'DB_USER_PASSWORD')]) {
+                            sh """
+                            docker-compose up -d app-coverage
+                            docker cp app-coverage:/app/coverage/ .
+                            """
+                        }
+                    } catch (Exception e) {
+                        echo "Помилка при створенні звіту про покриття: ${e.getMessage()}"
+                    }
+                }
+            }
+        }
+
+        stage('Publish coverage report') {
+            steps {
+                publishHTML target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'coverage',
+                    reportFiles: 'index.html',
+                    reportName: 'Coverage Reports',
+                    reportTitles: 'The Report'
+                ]
+            }
+        }
+    }
+}
