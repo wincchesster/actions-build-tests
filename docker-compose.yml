@@ -5,11 +5,11 @@ services:
     container_name: mysql-server
     image: mysql:latest
     environment:
-      # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      # MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password # for secrets usage in docker-compose
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       MYSQL_DATABASE: python_shop
       MYSQL_USER: python_app_user
-      # MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      # MYSQL_PASSWORD_FILE: /run/secrets/mysql_password # for secrets usage in docker-compose
       MYSQL_PASSWORD: ${DB_USER_PASSWORD}
     ports:
       - "3306:3306"
@@ -76,6 +76,7 @@ networks:
   mysql-network:
     driver: bridge
 
+# for secrets usage in docker-compose (you should create .env_mysql_root_password and .env_mysql_password files)
 # secrets:
 #   mysql_root_password:
 #     file: .env_mysql_root_password
