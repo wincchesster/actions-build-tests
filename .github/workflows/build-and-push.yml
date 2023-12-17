@@ -1,146 +1,146 @@
-name: Build
+# name: Build
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-  DB_USER_PASSWORD: ${{ secrets.DB_USER_PASSWORD }}
-  DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-  DB_HOST: ${{ secrets.DB_HOST }}
-  DB_DATABASE: ${{ secrets.DB_DATABASE }}
-  DB_USER: ${{ secrets.DB_USER }}
+# env:
+#   REGISTRY: ghcr.io
+#   IMAGE_NAME: ${{ github.repository }}
+#   DB_USER_PASSWORD: ${{ secrets.DB_USER_PASSWORD }}
+#   DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+#   DB_HOST: ${{ secrets.DB_HOST }}
+#   DB_DATABASE: ${{ secrets.DB_DATABASE }}
+#   DB_USER: ${{ secrets.DB_USER }}
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      packages: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+#     permissions:
+#       contents: write
+#       packages: write
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
 
 
-      - name: Log in to the Container registry
-        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
-        with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Log in to the Container registry
+#         uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+#         with:
+#           registry: ${{ env.REGISTRY }}
+#           username: ${{ github.actor }}
+#           password: ${{ secrets.GITHUB_TOKEN }}
 
     
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+#       - name: Extract metadata (tags, labels) for Docker
+#         id: meta
+#         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+#         with:
+#           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
     
-      - name: Bump version and push tag
-        id: tag_version
-        uses: mathieudutour/github-tag-action@v6.1
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Bump version and push tag
+#         id: tag_version
+#         uses: mathieudutour/github-tag-action@v6.1
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-    # if you want to use the this function you need change IMAGE_NAME to REPO in next step .    
-    #   - name: downcase REPO name
-    #     run: |
-    #         echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+#     # if you want to use the this function you need change IMAGE_NAME to REPO in next step .    
+#     #   - name: downcase REPO name
+#     #     run: |
+#     #         echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
 
-      - name: Build image
-        uses: docker/build-push-action@v5
-        with:
-          push: false
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+#       - name: Build image
+#         uses: docker/build-push-action@v5
+#         with:
+#           push: false
+#           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
-      - name: Build image with tests
-        uses: docker/build-push-action@v5
-        with:
-          file: Dockerfile_tests
-          push: false
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tests
+#       - name: Build image with tests
+#         uses: docker/build-push-action@v5
+#         with:
+#           file: Dockerfile_tests
+#           push: false
+#           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:tests
       
-      - name: Run tests
-        id: run_tests
-        run: |
-          docker compose up -d mysql
-          docker compose run -e DB_ROOT_PASSWORD=${{ env.DB_ROOT_PASSWORD }} \
-                             -e DB_USER=${{ env.DB_USER }} \
-                             -e DB_USER_PASSWORD=${{ env.DB_USER_PASSWORD }} \
-                             -e DB_DATABASE=${{ env.DB_DATABASE }} \
-                             -e DB_HOST=${{ env.DB_HOST }} \
-                             python_testing_app
+#       - name: Run tests
+#         id: run_tests
+#         run: |
+#           docker compose up -d mysql
+#           docker compose run -e DB_ROOT_PASSWORD=${{ env.DB_ROOT_PASSWORD }} \
+#                              -e DB_USER=${{ env.DB_USER }} \
+#                              -e DB_USER_PASSWORD=${{ env.DB_USER_PASSWORD }} \
+#                              -e DB_DATABASE=${{ env.DB_DATABASE }} \
+#                              -e DB_HOST=${{ env.DB_HOST }} \
+#                              python_testing_app
 
           
 
-      - name: Push image
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+#       - name: Push image
+#         uses: docker/build-push-action@v5
+#         with:
+#           push: true
+#           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag_version.outputs.new_tag }}, ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
 
 
-      - name: Test coverage
-        run: |
-          mkdir coverage
-          docker compose up -d mysql
-          docker compose run -e DB_ROOT_PASSWORD=${{ env.DB_ROOT_PASSWORD }} \
-                             -e DB_USER=${{ env.DB_USER }} \
-                             -e DB_USER_PASSWORD=${{ env.DB_USER_PASSWORD }} \
-                             -e DB_DATABASE=${{ env.DB_DATABASE }} \
-                             -e DB_HOST=${{ env.DB_HOST }} \
-                             app-coverage
-          rm -rf coverage/.gitignore
+#       - name: Test coverage
+#         run: |
+#           mkdir coverage
+#           docker compose up -d mysql
+#           docker compose run -e DB_ROOT_PASSWORD=${{ env.DB_ROOT_PASSWORD }} \
+#                              -e DB_USER=${{ env.DB_USER }} \
+#                              -e DB_USER_PASSWORD=${{ env.DB_USER_PASSWORD }} \
+#                              -e DB_DATABASE=${{ env.DB_DATABASE }} \
+#                              -e DB_HOST=${{ env.DB_HOST }} \
+#                              app-coverage
+#           rm -rf coverage/.gitignore
 
 
-      - name: Push coverage
-        uses: EndBug/add-and-commit@v9
-        with:
-          author_name: Oleksander Chaikovskyi
-          author_email: wincchesster@gmail.com
-          message: 'Add code coverage report'
-          add: 'coverage'
-          new_branch: gh-pages 
-          push: true
+#       - name: Push coverage
+#         uses: EndBug/add-and-commit@v9
+#         with:
+#           author_name: Oleksander Chaikovskyi
+#           author_email: wincchesster@gmail.com
+#           message: 'Add code coverage report'
+#           add: 'coverage'
+#           new_branch: gh-pages 
+#           push: true
         
 
-      - name: Deploy to GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v4
-        with:
-          target_branch: gh-pages # is default and can be changed to another branch
-          build_dir: coverage
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: Deploy to GitHub Pages
+#         uses: crazy-max/ghaction-github-pages@v4
+#         with:
+#           target_branch: gh-pages # is default and can be changed to another branch
+#           build_dir: coverage
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
-      - name: Archive code coverage results
-        uses: actions/upload-artifact@v3
-        with:
-          name: code-coverage-report
-          path: coverage/index.html
+#       - name: Archive code coverage results
+#         uses: actions/upload-artifact@v3
+#         with:
+#           name: code-coverage-report
+#           path: coverage/index.html
 
-      # - name: Release
-      #   uses: ncipollo/release-action@v1
-      #   with:
-      #    tag: ${{ steps.tag_version.outputs.new_tag }}
-      #    artifacts: "test-service.deb"
-      #    bodyFile: "release-notes.md"
+#       # - name: Release
+#       #   uses: ncipollo/release-action@v1
+#       #   with:
+#       #    tag: ${{ steps.tag_version.outputs.new_tag }}
+#       #    artifacts: "test-service.deb"
+#       #    bodyFile: "release-notes.md"
 
-      # - name: Create GitHub Release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     files: coverage/index.html
-      #     body: |
-      #       Some release notes go here.
-      #     tag_name: ${{ steps.tag_version.outputs.new_tag }}
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       # - name: Create GitHub Release
+#       #   uses: softprops/action-gh-release@v1
+#       #   with:
+#       #     files: coverage/index.html
+#       #     body: |
+#       #       Some release notes go here.
+#       #     tag_name: ${{ steps.tag_version.outputs.new_tag }}
+#       #   env:
+#       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   
 
