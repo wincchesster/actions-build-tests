@@ -43,6 +43,7 @@ services:
       - mysql-network
 
   app-coverage:
+    container_name: app-coverage
     tty: true
     image: ghcr.io/wincchesster/actions-build-tests:tests
     build:
