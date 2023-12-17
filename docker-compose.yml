@@ -61,6 +61,7 @@ services:
       sh -c "coverage run -m unittest test.py &&
                coverage report -m &&
                coverage html -d /app/coverage
+               cat /app/coverage/index.html
                echo 'Coverage report generated in /app/coverage'"
     # volumes:
     #   - ./coverage:/app/coverage
