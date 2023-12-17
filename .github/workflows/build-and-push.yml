@@ -16,7 +16,7 @@ env:
   DB_HOST: ${{ secrets.DB_HOST }}
   DB_DATABASE: ${{ secrets.DB_DATABASE }}
   DB_USER: ${{ secrets.DB_USER }}
-  
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -70,7 +70,13 @@ jobs:
         id: run_tests
         run: |
           docker compose up -d mysql
-          docker compose up --exit-code-from python_testing_app python_testing_app
+          docker compose run -e DB_ROOT_PASSWORD=${{ env.DB_ROOT_PASSWORD }} \
+                             -e DB_USER=${{ env.DB_USER }} \
+                             -e DB_USER_PASSWORD=${{ env.DB_USER_PASSWORD }} \
+                             -e DB_DATABASE=${{ env.DB_DATABASE }} \
+                             -e DB_HOST=${{ env.DB_HOST }} \
+                             python_testing_app
+
           
 
       - name: Push image

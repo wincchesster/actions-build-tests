@@ -9,7 +9,7 @@ load_dotenv()
 
 # Wait for mysql to be ready
 def wait_for_mysql():
-    max_retries = 30
+    max_retries = 10
     retries = 0
     password = os.getenv("DB_ROOT_PASSWORD")
     while True:
