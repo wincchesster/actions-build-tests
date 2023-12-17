@@ -68,6 +68,7 @@ services:
     #   - ./coverage:/app/coverage
     ports:
       - "80:8000"
+      - "81:80"
     depends_on:
       - mysql
     networks:
