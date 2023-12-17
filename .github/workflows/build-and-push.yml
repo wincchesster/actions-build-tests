@@ -11,7 +11,12 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-
+  DB_USER_PASSWORD: ${{ secrets.DB_USER_PASSWORD }}
+  DB_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+  DB_HOST: ${{ secrets.DB_HOST }}
+  DB_DATABASE: ${{ secrets.DB_DATABASE }}
+  DB_USER: ${{ secrets.DB_USER }}
+  
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
