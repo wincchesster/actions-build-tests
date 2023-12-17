@@ -36,7 +36,7 @@ pipeline {
                             """
                         }
                     } catch (Exception e) {
-                        echo "Помилка при створенні звіту про покриття: ${e.getMessage()}"
+                        echo "Error for mount: ${e.getMessage()}"
                     }
                 }
             }

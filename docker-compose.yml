@@ -62,8 +62,8 @@ services:
                coverage report -m &&
                coverage html -d /app/coverage
                cat /app/coverage/index.html
-               docker cp app-coverage:/app/coverage/ ./coverage
                echo 'Coverage report generated in /app/coverage'"
+    # ---- for github actions usage:
     # volumes:
     #   - ./coverage:/app/coverage
     ports:
